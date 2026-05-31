@@ -132,11 +132,7 @@ export class CreateNewsFormComponent extends BaseComponent {
         expect(count).toBeGreaterThanOrEqual(3);
 
         const firstTagText = await this.tagButtons.first().textContent() ?? '';
-
-        const isEnglish = FORM_TEXT.en.tags.some(tag =>
-            firstTagText.includes(tag)
-        );
-
+        const isEnglish = FORM_TEXT.en.tags.some(tag => firstTagText.includes(tag));
         const locale = isEnglish ? 'en' : 'uk';
 
         for (const tagName of FORM_TEXT[locale].tags) {
@@ -151,41 +147,29 @@ export class CreateNewsFormComponent extends BaseComponent {
         await expect(this.dateField).toBeVisible();
 
         const text = await this.dateField.textContent() ?? '';
-
-        const matchesEnglish =
-            FORM_TEXT.en.datePattern.test(text);
-
-        const matchesUkrainian =
-            FORM_TEXT.uk.datePattern.test(text);
+        const matchesEnglish = FORM_TEXT.en.datePattern.test(text);
+        const matchesUkrainian = FORM_TEXT.uk.datePattern.test(text);
 
         expect(
             matchesEnglish || matchesUkrainian,
             `Unexpected date format: "${text.trim()}"`
         ).toBeTruthy();
 
-        expect(
-            await this.isFieldEditable(this.dateField)
-        ).toBeFalsy();
+        expect(await this.isFieldEditable(this.dateField)).toBeFalsy();
     }
 
     async verifyAuthorField(): Promise<void> {
         await expect(this.authorField).toBeVisible();
 
         const text = await this.authorField.textContent() ?? '';
-
-        const isEnglish =
-            text.includes(FORM_TEXT.en.authorPrefix);
-
-        const isUkrainian =
-            text.includes(FORM_TEXT.uk.authorPrefix);
+        const isEnglish = text.includes(FORM_TEXT.en.authorPrefix);
+        const isUkrainian = text.includes(FORM_TEXT.uk.authorPrefix);
 
         expect(
             isEnglish || isUkrainian,
             `Unexpected author field text: "${text.trim()}"`
         ).toBeTruthy();
 
-        expect(
-            await this.isFieldEditable(this.authorField)
-        ).toBeFalsy();
+        expect(await this.isFieldEditable(this.authorField)).toBeFalsy();
     }
 }
