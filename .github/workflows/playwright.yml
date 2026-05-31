@@ -9,8 +9,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
   test:
@@ -24,7 +22,6 @@ jobs:
       HEADLESS: ${{ secrets.HEADLESS }}
       RETRIES: ${{ secrets.RETRIES }}
       TIMEOUT: ${{ secrets.TIMEOUT }}
-
 
     steps:
       - uses: actions/checkout@v4
@@ -43,16 +40,23 @@ jobs:
         run: npx playwright test
 
       - name: Generate Allure report
+        if: always()
         run: npx allure generate allure-results -o allure-report --clean
 
       - name: Upload Allure artifact
+        if: always()
         uses: actions/upload-pages-artifact@v3
         with:
           path: allure-report
 
   deploy:
     needs: test
+    if: always()
     runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
 
     environment:
       name: github-pages
