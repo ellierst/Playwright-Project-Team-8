@@ -19,8 +19,11 @@ jobs:
 
     env:
       BASE_URL: ${{ secrets.BASE_URL }}
-      TEST_EMAIL: ${{ secrets.USER_EMAIL }}
-      TEST_PASSWORD: ${{ secrets.USER_PASSWORD }}
+      TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      HEADLESS: ${{ secrets.HEADLESS }}
+      RETRIES: ${{ secrets.RETRIES }}
+      TIMEOUT: ${{ secrets.TIMEOUT }}
 
 
     steps:
