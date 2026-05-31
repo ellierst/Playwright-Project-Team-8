@@ -61,4 +61,26 @@ export class CreateNewsFormComponent extends BaseComponent {
     async clickPublish(): Promise<void> {
         await this.publishButton.click();
     }
+
+    async fillMandatoryFields(title: string, content: string, tagName: string): Promise<void> {
+        await this.fillTitle(title);
+        await this.selectTag(tagName);
+        await this.fillContent(content);
+    }
+
+    async clearSource(): Promise<void> {
+        await this.sourceInput.clear();
+    }
+
+    async getSourceValidationText(): Promise<string> {
+        return (await this.sourceInfo.textContent())?.trim() ?? '';
+    }
+
+    async isPublishButtonDisabled(): Promise<boolean> {
+        return await this.publishButton.isDisabled();
+    }
+
+    async isPublishButtonEnabled(): Promise<boolean> {
+        return await this.publishButton.isEnabled();
+    }
 }
