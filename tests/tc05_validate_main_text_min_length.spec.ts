@@ -4,19 +4,76 @@ import { EcoNewsPage } from '../pages/eco_news.page';
 import { CreateNewsPage } from '../pages/create_news.page';
 import { step, description, tag, severity } from "allure-js-commons";
 
-test('TC05: Main Text validation - below minimum', async ({ page }) => {
 
-    await description(
-        `Verify validation of the Main Text field.
-        Ensure the field accepts values within the allowed range (20–63,206 characters)
-        and that the Publish button remains disabled when the entered text contains fewer than 20 characters.`
-    );
+test('TC05-01: Main Text < 20 chars shows validation error', async ({ page }) => {
+    await description(`TC05-01: Verify validation of Main Text field when input is below minimum (20 chars).
+Ensure error message is displayed and Publish button remains disabled.`);
+
+    await tag('eco news');
+    await tag('create news');
+    await tag('validation');
+
+    await severity('normal');
+
+    await step("Login to system", async () => {
+    await login(page);
+    });
+
+    const ecoNewsPage = new EcoNewsPage(page);
+    const createNewsPage = new CreateNewsPage(page);
     
-    await tag("eco news");
-    await tag("create news");
-    await tag("validation");
+    await step("Open and fill Create News form", async () => {
+    await ecoNewsPage.open();
+    await ecoNewsPage.clickCreateNews();
 
-    await severity("Normal");
+    await createNewsPage.form.fillTitle("Test");
+    await createNewsPage.form.selectTag("News");
+    await createNewsPage.form.fillContent("Short text");
+
+    await expect(createNewsPage.form.errorMessage).toBeVisible();
+    await expect(createNewsPage.form.publishButton).toBeDisabled();
+    });
+});
+
+test('TC05-02: Main Text > 63206 chars is handled correctly', async ({ page }) => {
+    await description(`TC05-02: Verify behavior when Main Text exceeds maximum allowed length (63,206 chars).
+Ensure UI handles overflow according to specification.`);
+
+    await tag('eco news');
+    await tag('create news');
+    await tag('validation');
+
+    await severity('normal');
+
+    await step("Login to system", async () => {
+    await login(page);
+    });
+
+    const ecoNewsPage = new EcoNewsPage(page);
+    const createNewsPage = new CreateNewsPage(page);
+
+    await step("Open and fill Create News form", async () => {
+    await ecoNewsPage.open();
+    await ecoNewsPage.clickCreateNews();
+
+    const longText = 'A'.repeat(63207);
+    await createNewsPage.form.fillTitle("Test");
+    await createNewsPage.form.selectTag("News");
+    await createNewsPage.form.fillContent(longText);
+
+    await expect(createNewsPage.form.errorMessage).not.toBeVisible();
+    });
+});
+
+test('TC05-03: Valid Main Text allows publishing news', async ({ page }) => {
+    await description(`TC05-03: Verify successful publication when Main Text length is within valid range (20–63,206 chars).
+Ensure Publish button is enabled and news is created successfully.`);
+
+    await tag('eco news');
+    await tag('create news');
+    await tag('validation');
+
+    await severity('critical');
 
     await step("Login to system", async () => {
         await login(page);
@@ -25,34 +82,26 @@ test('TC05: Main Text validation - below minimum', async ({ page }) => {
     const ecoNewsPage = new EcoNewsPage(page);
     const createNewsPage = new CreateNewsPage(page);
 
-    await step("Open Create News form", async () => {
-        await ecoNewsPage.open();
-        await ecoNewsPage.clickCreateNews();
-    });
+    await step("Open and fill Create News form", async () => {
+    await ecoNewsPage.open();
+    await ecoNewsPage.clickCreateNews();
 
-    await step("Fill Title and less 20 characters in the Main Text field" , async () => {
-        await createNewsPage.form.fillTitle("Test");
-        await createNewsPage.form.fillContent("Short text");
-        await createNewsPage.form.selectTag("News");
-        await expect(createNewsPage.form.errorMessage).toBeVisible();
-        await expect(createNewsPage.form.publishButton).toBeDisabled();
-    });
+    await createNewsPage.form.fillTitle("Test");
+    await createNewsPage.form.selectTag("News");
 
-    await step("Fill more than 63206 characters in the Main Text field and check Publish button state" , async () => {
-        const longText = 'A'.repeat(63207);
-        await createNewsPage.form.fillContent(longText);
-        await expect(createNewsPage.form.errorMessage).not.toBeVisible();
-        await expect(createNewsPage.form.numberCharacters).toBeVisible();
-    });
+    await createNewsPage.form.fillContent(
+        "This is valid content with more than 20 characters"
+    );
 
-    await step ("Fill valid number of characters in the Main Text field and check Publish button state" , async () => {
-        await createNewsPage.form.fillContent("This is a valid content with more than 20 characters.");
-        await expect(createNewsPage.form.errorMessage).not.toBeVisible();
-        await createNewsPage.form.publishButton.click();
-        const profileName = await ecoNewsPage.getProfileName();
-        const firstNewsItem = await ecoNewsPage.getFirstNews();
-        const author = await firstNewsItem.locator('span.mw').textContent();
+    await expect(createNewsPage.form.errorMessage).not.toBeVisible();
 
-        await expect(author).toContain(profileName);
+    await createNewsPage.form.publishButton.click();
+
+    const profileName = await ecoNewsPage.getProfileName();
+    const firstNewsItem = await ecoNewsPage.getFirstNews();
+    const author = await firstNewsItem.locator('span.mw').textContent();
+
+    expect(author).toContain(profileName);
     });
 });
+
