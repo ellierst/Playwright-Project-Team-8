@@ -35,8 +35,8 @@ export class LoginModal extends BaseComponent {
     }
 
     async login(email: string, password: string): Promise<void> {
-        await this.emailInput.fill(email); 
-        await this.passwordInput.fill(password);
+        await this.fillEmail(email);
+        await this.fillPassword(password);
         await this.submit();
     }
 }
