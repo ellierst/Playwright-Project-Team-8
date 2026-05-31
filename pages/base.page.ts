@@ -1,9 +1,9 @@
 import { Page } from '@playwright/test';
 
 export class BasePage {
-    protected page: Page;
+    constructor(private page: Page) {}
 
-    constructor(page: Page) {
-        this.page = page;
+    async open() {
+        await this.page.goto('/#/greenCity/events');
     }
 }

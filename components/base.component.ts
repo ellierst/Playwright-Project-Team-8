@@ -8,4 +8,19 @@ export class BaseComponent {
         this.page = page;
         this.root = root;
     }
+
+    async isFieldEditable(locator: Locator): Promise<boolean> {
+        return await locator.evaluate((el) => {
+            const element = el as HTMLElement;
+
+            return (
+                element.isContentEditable ||
+                !!element.closest('input, textarea, [contenteditable]')
+            );
+        });
+    }
+
+    async waitForVisible(): Promise<void> {
+        await this.root.waitFor({ state: 'visible', timeout: 10000 });
+    }
 }

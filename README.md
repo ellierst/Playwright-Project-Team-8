@@ -1,4 +1,4 @@
-# Playwright Project — Team 8
+# Playwright Project – Team 8
 
 Automated end-to-end testing framework based on [Playwright](https://playwright.dev/) using TypeScript.
 The project contains a prepared structure for writing tests using the Page Object Model pattern and supports configuration via environment variables.
@@ -27,7 +27,6 @@ cd playwright-project-team-8
 npx playwright install
 ```
 
-
 **3. Install the dotenv package:**
 
 ```bash
@@ -35,7 +34,18 @@ npm install dotenv
 npm install --save-dev @types/node
 ```
 
-**4. Create a .env file based on the example:**
+**4. Install Allure dependencies**
+```bash
+npm install -D allure-playwright allure-commandline
+npm install -D @playwright/test
+```
+
+**5. Install Node types (for TypeScript):**
+```bash
+npm install --save-dev @types/node
+```
+
+**6. Create a .env file based on the example:**
 
 ```bash
 cp .env.example .env
@@ -48,6 +58,8 @@ BASE_URL=https://your-app-url.com
 HEADLESS=true
 RETRIES=0
 TIMEOUT=30000
+TEST_EMAIL=youremail
+TEST_PASSWORD=yourpassword
 ```
 
 ---
@@ -68,7 +80,7 @@ npx playwright test --project=firefox
 npx playwright test --project=webkit
 ```
 
-**Run in headed mode (with UI):**
+**Run in headed mode:**
 
 ```bash
 npx playwright test --headed
@@ -78,6 +90,14 @@ npx playwright test --headed
 
 ```bash
 npx playwright show-report
+```
+
+
+**View Allure Report:**
+
+```bash
+npx allure generate allure-results -o allure-report --clean
+npx allure open allure-report
 ```
 
 ---
@@ -102,17 +122,12 @@ The `.env.example` file contains a template with all available variables:
 playwright-project-team-8/
 │
 ├── tests/                  # Test cases
-│   ├── example.spec.ts
-│   └── smoke.spec.ts
 │
 ├── pages/                  # Page Object Model classes
-│   └── base.page.ts        # Base class for all pages
 │
 ├── components/             # Reusable UI components
-│   └── base.component.ts   # Base class for components
 │
 ├── fixtures/               # Playwright fixtures (test context extensions)
-│   └── base.fixture.ts
 │
 ├── utils/                  # Utility helpers
 │   └── env.ts              # Environment variables helper
@@ -135,14 +150,3 @@ Tests run across three browsers by default:
 - **WebKit** (Safari)
 
 Browser configuration can be changed in `playwright.config.ts`.
-
----
-
-## Reporting
-
-After test execution, an HTML report is automatically generated in the playwright-report/ directory.
-To view it:
-
-```bash
-npx playwright show-report
-```
