@@ -81,11 +81,39 @@ export class CreateNewsFormComponent extends BaseComponent {
         await this.publishButton.click();
     }
 
+    async fillMandatoryFields(
+        title: string,
+        content: string,
+        tagName: string
+    ): Promise<void> {
+        await this.fillTitle(title);
+        await this.selectTag(tagName);
+        await this.fillContent(content);
+    }
+
+    async clearSource(): Promise<void> {
+        await this.sourceInput.clear();
+    }
+
+    async getSourceValidationText(): Promise<string> {
+        return (await this.sourceInfo.textContent())?.trim() ?? '';
+    }
+
+    async isPublishButtonDisabled(): Promise<boolean> {
+        return await this.publishButton.isDisabled();
+    }
+
+    async isPublishButtonEnabled(): Promise<boolean> {
+        return await this.publishButton.isEnabled();
+    }
+
     async verifyDropzone(): Promise<void> {
         await expect(this.imageDropzone).toBeVisible();
+
         const text = await this.imageDropzone.textContent() ?? '';
         const isEnglish = text.includes(FORM_TEXT.en.dropzone);
         const isUkrainian = text.includes(FORM_TEXT.uk.dropzone);
+
         expect(
             isEnglish || isUkrainian,
             `Unexpected dropzone text: "${text.trim()}"`
@@ -94,16 +122,19 @@ export class CreateNewsFormComponent extends BaseComponent {
 
     async verifySourceHint(): Promise<void> {
         await expect(this.sourceInput).toBeVisible();
-        await expect(this.sourceInfo).toContainText('http(s)://');
+        await expect(this.sourceInfo).toContainText(FORM_TEXT.en.sourceHint);
     }
 
     async verifyTags(): Promise<void> {
         await expect(this.tagButtons.first()).toBeVisible();
+
         const count = await this.tagButtons.count();
         expect(count).toBeGreaterThanOrEqual(3);
 
         const firstTagText = await this.tagButtons.first().textContent() ?? '';
-        const isEnglish = FORM_TEXT.en.tags.some(t => firstTagText.includes(t));
+        const isEnglish = FORM_TEXT.en.tags.some(tagName =>
+            firstTagText.includes(tagName)
+        );
         const locale = isEnglish ? 'en' : 'uk';
 
         for (const tagName of FORM_TEXT[locale].tags) {
@@ -116,25 +147,31 @@ export class CreateNewsFormComponent extends BaseComponent {
 
     async verifyDateField(): Promise<void> {
         await expect(this.dateField).toBeVisible();
+
         const text = await this.dateField.textContent() ?? '';
-        const matchesEn = FORM_TEXT.en.datePattern.test(text);
-        const matchesUk = FORM_TEXT.uk.datePattern.test(text);
+        const matchesEnglish = FORM_TEXT.en.datePattern.test(text);
+        const matchesUkrainian = FORM_TEXT.uk.datePattern.test(text);
+
         expect(
-            matchesEn || matchesUk,
+            matchesEnglish || matchesUkrainian,
             `Unexpected date format: "${text.trim()}"`
         ).toBeTruthy();
+
         expect(await this.isFieldEditable(this.dateField)).toBeFalsy();
     }
 
     async verifyAuthorField(): Promise<void> {
         await expect(this.authorField).toBeVisible();
+
         const text = await this.authorField.textContent() ?? '';
         const isEnglish = text.includes(FORM_TEXT.en.authorPrefix);
         const isUkrainian = text.includes(FORM_TEXT.uk.authorPrefix);
+
         expect(
             isEnglish || isUkrainian,
             `Unexpected author field text: "${text.trim()}"`
         ).toBeTruthy();
+
         expect(await this.isFieldEditable(this.authorField)).toBeFalsy();
     }
 }
