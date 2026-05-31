@@ -9,8 +9,4 @@ export class CreateNewsPage {
         this.page = page;
         this.form = new CreateNewsFormComponent(page);
     }
-
-    async open(): Promise<void> {
-        await this.page.goto('/#/greenCity/news/create-news');
-    }
 }

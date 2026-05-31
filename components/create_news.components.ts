@@ -1,5 +1,24 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { BaseComponent } from './base.component';
+
+export const FORM_TEXT = {
+    en: {
+        dropzone: 'Drop your image here',
+        sourceHint: 'http(s)://',
+        tags: ['News', 'Events', 'Education', 'Initiatives', 'Ads'],
+        datePrefix: 'Date:',
+        authorPrefix: 'Author:',
+        datePattern: /Date:\s+[A-Za-z]+\s+\d{1,2},\s+\d{4}/,
+    },
+    uk: {
+        dropzone: 'Перетягніть зображення сюди',
+        sourceHint: 'http(s)://',
+        tags: ['Новини', 'Події', 'Освіта', 'Ініціативи', 'Реклама'],
+        datePrefix: 'Дата:',
+        authorPrefix: 'Автор:',
+        datePattern: /Дата:\s+\d{1,2}\s+[А-Яа-яІіЇїЄє]+\s+\d{4}/,
+    },
+};
 
 export class CreateNewsFormComponent extends BaseComponent {
     readonly titleInput: Locator;
@@ -26,8 +45,8 @@ export class CreateNewsFormComponent extends BaseComponent {
         this.sourceInfo = root.locator('.source-block .field-info');
         this.imageDropzone = root.locator('.dropzone');
         this.quillEditor = root.locator('quill-editor .ql-editor');
-        this.dateField = root.locator('.date p').filter({ hasText: 'Date:' });
-        this.authorField = root.locator('.date p').filter({ hasText: 'Author:' });
+        this.dateField = root.locator('.date p').filter({ hasText: /Date:|Дата:/ });
+        this.authorField = root.locator('.date p').filter({ hasText: /Author:|Автор:/ });
         this.cancelButton = root.locator('.submit-buttons button.tertiary-global-button');
         this.previewButton = root.locator('.submit-buttons button.secondary-global-button');
         this.publishButton = root.locator('.submit-buttons button.primary-global-button[type="submit"]');
@@ -60,5 +79,62 @@ export class CreateNewsFormComponent extends BaseComponent {
 
     async clickPublish(): Promise<void> {
         await this.publishButton.click();
+    }
+
+    async verifyDropzone(): Promise<void> {
+        await expect(this.imageDropzone).toBeVisible();
+        const text = await this.imageDropzone.textContent() ?? '';
+        const isEnglish = text.includes(FORM_TEXT.en.dropzone);
+        const isUkrainian = text.includes(FORM_TEXT.uk.dropzone);
+        expect(
+            isEnglish || isUkrainian,
+            `Unexpected dropzone text: "${text.trim()}"`
+        ).toBeTruthy();
+    }
+
+    async verifySourceHint(): Promise<void> {
+        await expect(this.sourceInput).toBeVisible();
+        await expect(this.sourceInfo).toContainText('http(s)://');
+    }
+
+    async verifyTags(): Promise<void> {
+        await expect(this.tagButtons.first()).toBeVisible();
+        const count = await this.tagButtons.count();
+        expect(count).toBeGreaterThanOrEqual(3);
+
+        const firstTagText = await this.tagButtons.first().textContent() ?? '';
+        const isEnglish = FORM_TEXT.en.tags.some(t => firstTagText.includes(t));
+        const locale = isEnglish ? 'en' : 'uk';
+
+        for (const tagName of FORM_TEXT[locale].tags) {
+            await expect(
+                this.tagButtons.filter({ hasText: tagName }),
+                `Tag "${tagName}" not found`
+            ).toBeVisible();
+        }
+    }
+
+    async verifyDateField(): Promise<void> {
+        await expect(this.dateField).toBeVisible();
+        const text = await this.dateField.textContent() ?? '';
+        const matchesEn = FORM_TEXT.en.datePattern.test(text);
+        const matchesUk = FORM_TEXT.uk.datePattern.test(text);
+        expect(
+            matchesEn || matchesUk,
+            `Unexpected date format: "${text.trim()}"`
+        ).toBeTruthy();
+        expect(await this.isFieldEditable(this.dateField)).toBeFalsy();
+    }
+
+    async verifyAuthorField(): Promise<void> {
+        await expect(this.authorField).toBeVisible();
+        const text = await this.authorField.textContent() ?? '';
+        const isEnglish = text.includes(FORM_TEXT.en.authorPrefix);
+        const isUkrainian = text.includes(FORM_TEXT.uk.authorPrefix);
+        expect(
+            isEnglish || isUkrainian,
+            `Unexpected author field text: "${text.trim()}"`
+        ).toBeTruthy();
+        expect(await this.isFieldEditable(this.authorField)).toBeFalsy();
     }
 }

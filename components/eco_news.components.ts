@@ -8,6 +8,11 @@ export class EcoNewsComponent {
     }
 
     async clickCreateNews() {
-        await this.createNewsButton.click();
+        if (await this.createNewsButton.isVisible()) {
+            await this.createNewsButton.click();
+        }
+        else {
+            throw new Error('Create News button is not visible');
+        }
     }
 }
