@@ -33,6 +33,8 @@ export class CreateNewsFormComponent extends BaseComponent {
     readonly cancelButton: Locator;
     readonly previewButton: Locator;
     readonly publishButton: Locator;
+    readonly errorMessage: Locator;
+    readonly numberCharacters: Locator;
 
     constructor(page: Page) {
         const root = page.locator('form[enctype="multipart/form-data"]').first();
@@ -50,6 +52,8 @@ export class CreateNewsFormComponent extends BaseComponent {
         this.cancelButton = root.locator('.submit-buttons button.tertiary-global-button');
         this.previewButton = root.locator('.submit-buttons button.secondary-global-button');
         this.publishButton = root.locator('.submit-buttons button.primary-global-button[type="submit"]');
+        this.errorMessage = root.locator('p.quill-counter.warning');
+        this.numberCharacters = root.locator('p.quill-counter.quill-valid');
     }
 
     async fillTitle(title: string): Promise<void> {
