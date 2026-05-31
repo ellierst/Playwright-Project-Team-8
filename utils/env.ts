@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load .env from the project root
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
 function getEnv(key: string, defaultValue?: string): string {
@@ -23,4 +22,8 @@ export const env = {
     retries: Number(getEnv('RETRIES', '0')),
 
     timeout: Number(getEnv('TIMEOUT', '30000')),
+
+    testEmail: getEnv('TEST_EMAIL', ''),
+
+    testPassword: getEnv('TEST_PASSWORD', ''),
 } as const;

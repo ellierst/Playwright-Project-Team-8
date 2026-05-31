@@ -2,7 +2,8 @@ node_modules/
 playwright-report/
 test-results/
 .env
-
+allure-results
+allure-report
 
 # Playwright
 node_modules/

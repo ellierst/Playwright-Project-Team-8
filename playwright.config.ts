@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 import { env } from './utils/env';
 
 export default defineConfig({
@@ -14,7 +14,13 @@ export default defineConfig({
 
   workers: process.env.CI ? 1 : undefined,
 
-  reporter: 'html',
+  reporter: [
+        ['line'],
+        ['allure-playwright', {
+            outputFolder: 'allure-results',
+            suiteTitle: false,
+        }],
+    ],
 
   use: {
     trace: 'on-first-retry',
@@ -27,17 +33,27 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+            channel: 'chromium',
+            //viewport: null,
+            launchOptions: {
+                args: [
+                    '--window-size=1920,1080',
+                        '--disable-features=Translate',
+                        '--disable-features=TranslateUI',
+                ],
+            },
+        },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    //{
+      //name: 'firefox',
+      //use: { ...devices['Desktop Firefox'] },
+    //},
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    //{
+      //name: 'webkit',
+      //use: { ...devices['Desktop Safari'] },
+    //},
   ],
 });
