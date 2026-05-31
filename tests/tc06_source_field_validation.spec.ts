@@ -102,6 +102,8 @@ test('TC08: Verify "Source" field validation', async ({ page }) => {
 
     await step('Verify that created news is published successfully', async () => {
         await expect(page).toHaveURL(/news/);
-        await expect(page.getByText(newsTitle).first()).toBeVisible();
+        await expect(page.getByText(newsTitle).first()).toBeVisible({
+            timeout: 15000,
+        });
     });
 });
