@@ -16,6 +16,7 @@ export default defineConfig({
 
   reporter: [
         ['line'],
+        ['html', { outputFolder: 'playwright-report', open: 'never' }],
         ['allure-playwright', {
             outputFolder: 'allure-results',
             suiteTitle: false,
@@ -24,10 +25,12 @@ export default defineConfig({
 
   use: {
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
 
     baseURL: env.baseUrl,
 
     headless: env.headless,
+    
   },
 
   projects: [
@@ -37,6 +40,7 @@ export default defineConfig({
             channel: 'chromium',
             //viewport: null,
             launchOptions: {
+              // slowMo: 1000,
                 args: [
                     '--window-size=1920,1080',
                         '--disable-features=Translate',

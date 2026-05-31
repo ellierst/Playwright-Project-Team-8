@@ -2,19 +2,20 @@ import { test, expect } from '../fixtures/base.page.fixture';
 import { login } from '../utils/auth';
 import { EcoNewsPage } from '../pages/eco_news.page';
 import { CreateNewsPage } from '../pages/create_news.page';
-import { step, description, tag, severity } from "allure-js-commons";
+import { step, description, tag, severity, issue } from "allure-js-commons";
 
-test('TC01: Verify that the events list can be filtered by event type', async ({ page }) => {
+test('TC01: Verify Create News form structure', async ({ page }) => {
 
     await description(
-        `Verify UI structure of Create News form:
-        ensures all mandatory fields are present, ordered correctly, and readonly constraints are applied where required.`
+        `Verify that the "Create News" form displays all the necessary fields in the correct order.`
     );
     
     await tag("eco news");
     await tag("create news");
 
-    await severity("Normal");
+    await severity("MEDIUM");
+
+    await issue("https://github.com/ellierst/Playwright-Project-Team-8/issues/2#issue-4558192995");
 
     await step("Login to system", async () => {
         await login(page);
@@ -34,26 +35,15 @@ test('TC01: Verify that the events list can be filtered by event type', async ({
     });
 
     await step("Verify tags section", async () => {
-        await expect(createNewsPage.form.tagButtons.first()).toBeVisible();
-
-        const tagsCount = await createNewsPage.form.tagButtons.count();
-        expect(tagsCount).toBeGreaterThanOrEqual(3);
-
-        for (const tagName of ['News', 'Events', 'Education', 'Initiatives', 'Ads']) {
-            await expect(
-                createNewsPage.form.tagButtons.filter({ hasText: tagName })
-            ).toBeVisible();
-        }
+        await createNewsPage.form.verifyTags();
     });
 
     await step("Verify source field", async () => {
-        await expect(createNewsPage.form.sourceInput).toBeVisible();
-        await expect(createNewsPage.form.sourceInfo).toContainText('http(s)://');
+        await createNewsPage.form.verifySourceHint();
     });
 
     await step("Verify image upload section", async () => {
-        await expect(createNewsPage.form.imageDropzone).toBeVisible();
-        await expect(createNewsPage.form.imageDropzone).toContainText('Drop your image here');
+        await createNewsPage.form.verifyDropzone();
     });
 
     await step("Verify main text editor", async () => {
@@ -64,16 +54,8 @@ test('TC01: Verify that the events list can be filtered by event type', async ({
     });
 
     await step("Verify date and author fields are readonly", async () => {
-
-        await expect(createNewsPage.form.dateField).toBeVisible();
-        const dateText = await createNewsPage.form.dateField.textContent();
-        expect(dateText).toMatch(/Date:\s+[A-Za-z]+\s+\d{1,2},\s+\d{4}/);
-        expect(await createNewsPage.form.isFieldEditable(createNewsPage.form.dateField)).toBeFalsy();
-
-        await expect(createNewsPage.form.authorField).toBeVisible();
-        const authorText = await createNewsPage.form.authorField.textContent();
-        expect(authorText).toContain('Author:');
-        expect(await createNewsPage.form.isFieldEditable(createNewsPage.form.authorField)).toBeFalsy();
+        await createNewsPage.form.verifyDateField();
+        await createNewsPage.form.verifyAuthorField();
     });
 
     await step("Verify action buttons", async () => {
