@@ -128,7 +128,7 @@ export class CreateNewsFormComponent extends BaseComponent {
         expect(count).toBeGreaterThanOrEqual(3);
 
         const firstTagText = await this.tagButtons.first().textContent() ?? '';
-        const isEnglish = FORM_TEXT.en.tags.some(tag => firstTagText.includes(tag));
+        const isEnglish = FORM_TEXT.en.tags.some(tagName => firstTagText.includes(tagName));
         const locale = isEnglish ? 'en' : 'uk';
 
         for (const tagName of FORM_TEXT[locale].tags) {
