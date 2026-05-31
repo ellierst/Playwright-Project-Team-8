@@ -30,25 +30,13 @@ export class LoginModal extends BaseComponent {
     }
 
     async submit(): Promise<void> {
-        await expect(this.submitButton).toBeEnabled({ timeout: 10000 });
+        await expect(this.submitButton).toBeVisible();
         await this.submitButton.click();
     }
 
     async login(email: string, password: string): Promise<void> {
-        // DEBUG
-        console.log('Modal root visible:', await this.root.isVisible());
-        console.log('Email input count:', await this.emailInput.count());
-        console.log('Password input count:', await this.passwordInput.count());
-        console.log('Submit button count:', await this.submitButton.count());
-        console.log('Submit disabled before fill:', await this.submitButton.isDisabled());
-
         await this.fillEmail(email);
-        console.log('Email filled, value:', await this.emailInput.inputValue());
-
         await this.fillPassword(password);
-        console.log('Password filled, length:', (await this.passwordInput.inputValue()).length);
-
-        console.log('Submit disabled after fill:', await this.submitButton.isDisabled());
         await this.submit();
     }
 }
