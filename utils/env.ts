@@ -15,7 +15,7 @@ function getEnv(key: string, defaultValue?: string): string {
 }
 
 export const env = {
-    baseUrl: getEnv('BASE_URL', 'http://localhost:3000'),
+    baseUrl: getEnv('BASE_URL'),
 
     headless: getEnv('HEADLESS', 'true') === 'true',
 
