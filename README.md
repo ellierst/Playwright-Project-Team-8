@@ -109,10 +109,12 @@ The `.env.example` file contains a template with all available variables:
 
 | Variable | Description | Default value |
 |---|---|---|
-| `BASE_URL` | Base URL of the application | `http://localhost:3000` |
+| `BASE_URL` | Base URL of the application | `app url` |
 | `HEADLESS` | Run browser in headless mode | `true` |
 | `RETRIES` | Number of retries on test failure | `0` |
 | `TIMEOUT` | Maximum timeout (ms) | `30000` |
+| `TEST_EMAIL` | Email for login | `email` |
+| `TEST_PASSWORD` | Password for login | `password` |
 
 ---
 

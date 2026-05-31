@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/base.page.fixture';
 import { login } from '../utils/auth';
 import { EcoNewsPage } from '../pages/eco_news.page';
 import { CreateNewsPage } from '../pages/create_news.page';
-import { step, description, tag, severity, Severity } from "allure-js-commons";
+import { step, description, tag, severity } from "allure-js-commons";
 
 test('TC01: Verify that the events list can be filtered by event type', async ({ page }) => {
 
