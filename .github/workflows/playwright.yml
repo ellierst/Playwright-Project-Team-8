@@ -2,7 +2,7 @@ name: Playwright Tests + Allure Report
 
 on:
   push:
-    branches: [ main, master, test-01-allure ]
+    branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
@@ -51,7 +51,8 @@ jobs:
 
   deploy:
     needs: test
-    if: always()
+    # Deploy only on push to main/master (not on pull_request)
+    if: always() && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
 
     permissions:
