@@ -5,7 +5,7 @@ import { EcoNewsPage } from '../pages/eco_news.page';
 import { CreateNewsPage } from '../pages/create_news.page';
 import { login } from '../utils/auth';
 
-test('TC08: Verify "Source" field validation', async ({ page }) => {
+test('TC06: Verify "Source" field validation', async ({ page }) => {
     const newsTitle = `Test News Source ${Date.now()}`;
     const newsContent = 'This is test content for source validation';
     const validSource = 'https://example.com';
@@ -71,30 +71,6 @@ test('TC08: Verify "Source" field validation', async ({ page }) => {
         ).toBeTruthy();
     });
 
-    await step('Debug Source field validation state before publishing', async () => {
-        const elements = [
-            { name: 'sourceInput', el: createNewsPage.form.sourceInput },
-            { name: 'sourceInfo', el: createNewsPage.form.sourceInfo },
-            { name: 'publishButton', el: createNewsPage.form.publishButton },
-        ];
-
-        for (const { name, el } of elements) {
-            const box = await el.boundingBox();
-            console.log(`${name}: y=${box?.y?.toFixed(2)}`);
-        }
-
-        console.log(
-            `Source info text: ${await createNewsPage.form.sourceInfo.textContent()}`
-        );
-
-        console.log(
-            `Publish button disabled: ${await createNewsPage.form.publishButton.isDisabled()}`
-        );
-
-        console.log(
-            `Publish button enabled: ${await createNewsPage.form.publishButton.isEnabled()}`
-        );
-    });
 
     await step('Publish news with valid Source URL', async () => {
         await createNewsPage.form.clickPublish();

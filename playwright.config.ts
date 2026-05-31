@@ -14,6 +14,10 @@ export default defineConfig({
 
   workers: process.env.CI ? 1 : undefined,
 
+  // fullyParallel: false,
+
+  // workers: 1,
+
   reporter: [
         ['line'],
         ['html', { outputFolder: 'playwright-report', open: 'never' }],
