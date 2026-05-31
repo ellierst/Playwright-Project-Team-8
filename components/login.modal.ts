@@ -30,13 +30,13 @@ export class LoginModal extends BaseComponent {
     }
 
     async submit(): Promise<void> {
-        await expect(this.submitButton).toBeVisible();
+        await expect(this.submitButton).toBeEnabled({ timeout: 10000 });
         await this.submitButton.click();
     }
 
     async login(email: string, password: string): Promise<void> {
-        await this.fillEmail(email);
-        await this.fillPassword(password);
+        await this.emailInput.fill(email); 
+        await this.passwordInput.fill(password);
         await this.submit();
     }
 }
