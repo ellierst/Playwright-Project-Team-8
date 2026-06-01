@@ -48,6 +48,9 @@ jobs:
           mkdir -p allure-results/history
           if [ -d "gh-pages/history" ]; then
             cp -r gh-pages/history/* allure-results/history/
+            echo "History copied from gh-pages"
+          else
+            echo "No history found - first run"
           fi
 
       - name: Run Playwright tests
