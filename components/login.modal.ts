@@ -16,6 +16,10 @@ export class LoginModal extends BaseComponent {
     }
 
     async fillEmail(email: string): Promise<void> {
+        await this.page.evaluate(() => {
+            const container = document.getElementById('credential_picker_container');
+            if (container) container.remove();
+        });
         await this.emailInput.waitFor({ state: 'visible', timeout: 10000 });
         await this.emailInput.click();
         await this.emailInput.clear();
