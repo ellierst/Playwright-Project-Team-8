@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 import { env } from './utils/env';
 
 export default defineConfig({
@@ -42,9 +42,7 @@ export default defineConfig({
       name: 'chromium',
       use: {
             channel: 'chromium',
-
             //viewport: null,
-            
             launchOptions: {
               // slowMo: 1000,
                 args: [
@@ -56,13 +54,14 @@ export default defineConfig({
         },
     },
 
-    {
-      name: 'firefox',
-      use: {
-        launchOptions: {
-          args: process.env.CI ? ['--no-sandbox', '--disable-setuid-sandbox'] : [],
-        },
-      },
-    },
+    //{
+      //name: 'firefox',
+      //use: { ...devices['Desktop Firefox'] },
+    //},
+
+    //{
+      //name: 'webkit',
+      //use: { ...devices['Desktop Safari'] },
+    //},
   ],
 });
