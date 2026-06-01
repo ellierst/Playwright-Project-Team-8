@@ -33,6 +33,8 @@ export class CreateNewsFormComponent extends BaseComponent {
     readonly cancelButton: Locator;
     readonly previewButton: Locator;
     readonly publishButton: Locator;
+    readonly errorMessage: Locator;
+    readonly numberCharacters: Locator;
     readonly imageInput: Locator;
     readonly imageErrorMessage: Locator;
     readonly cancelCropButton: Locator;
@@ -53,11 +55,14 @@ export class CreateNewsFormComponent extends BaseComponent {
         this.cancelButton = root.locator('.submit-buttons button.tertiary-global-button');
         this.previewButton = root.locator('.submit-buttons button.secondary-global-button');
         this.publishButton = root.locator('.submit-buttons button.primary-global-button[type="submit"]');
+        this.errorMessage = root.locator('p.quill-counter.warning');
+        this.numberCharacters = root.locator('p.quill-counter.quill-valid');
+    
         this.imageInput = page.locator('input#upload[type="file"]');
         this.imageDropzone = page.locator('app-drag-and-drop .dropzone');
         this.imageErrorMessage = page.locator('app-drag-and-drop p.warning-color');
         this.cancelCropButton = page.locator('app-drag-and-drop button.secondary-global-button.s-btn');
-        }
+    }
 
     async fillTitle(title: string): Promise<void> {
         await this.titleInput.fill(title);
