@@ -57,13 +57,25 @@ jobs:
         if: always()
         run: npx allure generate allure-results -o allure-report --clean
 
-      - name: Verify report exists
+      - name: Upload Allure Report
         if: always()
-        run: ls -la allure-report/
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
 
   deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always() && github.event_name != 'pull_request'
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+
       - name: Deploy to GitHub Pages
-        if: always() && github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
