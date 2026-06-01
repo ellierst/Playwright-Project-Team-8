@@ -1,0 +1,7 @@
+titleInput: y=281.19
+tagButtons: y=472.78
+imageDropzone: y=281.19
+quillEditor: y=762.91
+sourceInput: y=588.19
+authorField: y=1016.91
+dateField: y=1016.91

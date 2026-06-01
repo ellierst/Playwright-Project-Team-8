@@ -1,0 +1,12 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Verify that user can select from one to three tags only.","3428","TC03: Verify tag selection limits","chromium","2026-06-01","passed","2026-06-01","","","",""
+"Verify that the optional ""Source"" field accepts only valid URLs and displays validation message for invalid input.","4459","TC06: Verify ""Source"" field validation","chromium","2026-06-01","passed","2026-06-01","","","",""
+"Verify validation of the ""Upload Image"" field: accepted formats PNG/JPG, maximum size 10MB.","3484","TC04: Verify Upload Image field validation","chromium","2026-06-01","passed","2026-06-01","","","",""
+"TC10: Verify that a user can update an existing news item.","5254","TC10: Update news","chromium","2026-06-01","passed","2026-06-01","","","",""
+"Verify Title field validation, character limit and Publish button availability.","3630","TC02: Verify Title validation and Publish button state","chromium","2026-06-01","passed","2026-06-01","","","",""
+"Verify that the user can preview news content after entering valid data and that the preview matches the input.","3540","TC08: Verify news preview content","chromium","2026-06-01","passed","2026-06-01","","","",""
+"Verify that clicking the ""Continue"" (Continue editing) button on the Create News form triggers a confirmation modal.
+        Clicking ""Continue"" (""Продовжити"") dismisses the modal and keeps the Create News form open with all previously entered data.","3988","TC07 Part 2: Verify ""Continue"" dismisses modal and keeps form data intact","chromium","2026-06-01","passed","2026-06-01","","","",""
+"Verify that clicking the ""Cancel"" button on the Create News form triggers a confirmation modal.
+        Clicking ""Cancel"" (""Скасувати"") should close the form and redirect to the news page.","3691","TC07 Part 1: Verify Cancel button triggers confirmation modal and ""Cancel"" redirects to news page","chromium","2026-06-01","passed","2026-06-01","","","",""
+"Verify that the ""Create News"" form displays all the necessary fields in the correct order.","3982","TC01: Verify Create News form structure","chromium","2026-06-01","passed","2026-06-01","","","",""

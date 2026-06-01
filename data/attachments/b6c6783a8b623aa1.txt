@@ -1,0 +1,3 @@
+Valid PNG uploaded successfully. Cropper controls are visible.
+GIF validation message: Upload only PNG or JPG. File size must be less than 10MB
+Large JPEG validation message: Upload only PNG or JPG. File size must be less than 10MB
