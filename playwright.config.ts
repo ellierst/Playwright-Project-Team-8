@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 import { env } from './utils/env';
 
 export default defineConfig({
@@ -41,7 +41,7 @@ export default defineConfig({
     {
       name: 'chromium',
       use: {
-            channel: 'chromium',
+            ...devices['Desktop Chrome'],
             //viewport: null,
             launchOptions: {
               // slowMo: 1000,
@@ -57,11 +57,6 @@ export default defineConfig({
     //{
       //name: 'firefox',
       //use: { ...devices['Desktop Firefox'] },
-    //},
-
-    //{
-      //name: 'webkit',
-      //use: { ...devices['Desktop Safari'] },
     //},
   ],
 });
