@@ -15,6 +15,7 @@
     "allure-playwright": "^3.9.0"
   },
   "dependencies": {
+    "allure": "^3.9.0",
     "dotenv": "^17.4.2"
   }
 }
