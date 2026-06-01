@@ -48,9 +48,6 @@ jobs:
           mkdir -p allure-results/history
           if [ -d "gh-pages/history" ]; then
             cp -r gh-pages/history/* allure-results/history/
-            echo "History copied from gh-pages"
-          else
-            echo "No history found - first run"
           fi
 
       - name: Run Playwright tests
@@ -60,11 +57,24 @@ jobs:
         if: always()
         run: npx allure generate allure-results -o allure-report --clean
 
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+
   deploy:
     needs: test
     runs-on: ubuntu-latest
     if: always() && github.event_name != 'pull_request'
+
     steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
