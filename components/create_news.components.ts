@@ -35,6 +35,9 @@ export class CreateNewsFormComponent extends BaseComponent {
     readonly publishButton: Locator;
     readonly errorMessage: Locator;
     readonly numberCharacters: Locator;
+    readonly imageInput: Locator;
+    readonly imageErrorMessage: Locator;
+    readonly cancelCropButton: Locator;
 
     constructor(page: Page) {
         const root = page.locator('form[enctype="multipart/form-data"]').first();
@@ -45,7 +48,7 @@ export class CreateNewsFormComponent extends BaseComponent {
         this.tagButtons = root.locator('.tags-box .tag-button');
         this.sourceInput = root.locator('input[formcontrolname="source"]');
         this.sourceInfo = root.locator('.source-block .field-info');
-        this.imageDropzone = root.locator('.dropzone');
+        // this.imageDropzone = root.locator('.dropzone');
         this.quillEditor = root.locator('quill-editor .ql-editor');
         this.dateField = root.locator('.date p').filter({ hasText: /Date:|Дата:/ });
         this.authorField = root.locator('.date p').filter({ hasText: /Author:|Автор:/ });
@@ -54,6 +57,11 @@ export class CreateNewsFormComponent extends BaseComponent {
         this.publishButton = root.locator('.submit-buttons button.primary-global-button[type="submit"]');
         this.errorMessage = root.locator('p.quill-counter.warning');
         this.numberCharacters = root.locator('p.quill-counter.quill-valid');
+    
+        this.imageInput = page.locator('input#upload[type="file"]');
+        this.imageDropzone = page.locator('app-drag-and-drop .dropzone');
+        this.imageErrorMessage = page.locator('app-drag-and-drop p.warning-color');
+        this.cancelCropButton = page.locator('app-drag-and-drop button.secondary-global-button.s-btn');
     }
 
     async fillTitle(title: string): Promise<void> {
@@ -177,5 +185,33 @@ export class CreateNewsFormComponent extends BaseComponent {
         ).toBeTruthy();
 
         expect(await this.isFieldEditable(this.authorField)).toBeFalsy();
+    }
+
+    async uploadImage(filePath: string): Promise<void> {
+        await expect(this.imageInput).toBeAttached();
+        await this.imageInput.setInputFiles(filePath);
+    }
+
+    async cancelUploadedImage(): Promise<void> {
+        await expect(this.cancelCropButton).toBeVisible();
+        await this.cancelCropButton.click();
+    }
+
+    async expectImageUploadError(): Promise<void> {
+        await expect(this.imageDropzone).toHaveClass(/warning-background/);
+        await expect(this.imageErrorMessage).toBeVisible();
+        await expect(this.imageErrorMessage).toHaveText('Upload only PNG or JPG. File size must be less than 10MB');
+    }
+
+    async getImageErrorText(): Promise<string> {
+        return (await this.imageErrorMessage.textContent())?.trim() ?? '';
+    }
+
+    async logImageUploadState(): Promise<void> {
+        const dropzoneBox = await this.imageDropzone.boundingBox();
+        const errorText = await this.getImageErrorText();
+
+        console.log(`imageDropzone: y=${dropzoneBox?.y?.toFixed(2)}`);
+        console.log(`imageErrorMessage: ${errorText}`);
     }
 }
