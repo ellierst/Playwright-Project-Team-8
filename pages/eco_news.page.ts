@@ -41,4 +41,21 @@ export class EcoNewsPage {
     async clickCreateNews() {
         await this.ecoNewsComponent.clickCreateNews();
     }
+
+    async clickEditNews() {
+        await this.ecoNewsComponent.clickEditNews();
+    }
+
+    async getProfileName() {
+        return (await this.header.nameProfile.textContent()) ?? '';
+    }
+
+    async getFirstNews() {
+        return this.page.locator('li.gallery-view-li-active').first();
+    }
+
+    getNews() {
+        return this.page.locator('li.gallery-view-li-active');
+    }
+
 }
