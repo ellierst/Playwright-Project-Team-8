@@ -77,6 +77,7 @@ npx playwright test
 ```bash
 npx playwright test --project=chromium
 npx playwright test --project=firefox
+npx playwright test --project=webkit
 ```
 
 **Run in headed mode:**
@@ -148,5 +149,6 @@ Tests run across three browsers by default:
 
 - **Chromium** (Google Chrome)
 - **Firefox**
+- **WebKit** (Safari)
 
 Browser configuration can be changed in `playwright.config.ts`.
