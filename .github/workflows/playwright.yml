@@ -8,9 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 jobs:
   test:
@@ -45,7 +43,7 @@ jobs:
           path: gh-pages
         continue-on-error: true
 
-      - name: Copy Allure history
+      - name: Prepare Allure history
         run: |
           mkdir -p allure-results/history
           if [ -d "gh-pages/history" ]; then
@@ -59,22 +57,15 @@ jobs:
         if: always()
         run: npx allure generate allure-results -o allure-report --clean
 
-      - name: Upload Allure artifact
+      - name: Verify report exists
         if: always()
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: allure-report
+        run: ls -la allure-report/
 
   deploy:
-    needs: test
-    if: always() && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        if: always() && github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: allure-report
+          keep_files: true
